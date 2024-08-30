@@ -26,7 +26,7 @@ public class UserEntity {
 
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // this makes password write only
   private String password;
-  
+
   @Embedded
   private TwoFactorAuth twoFactorAuth = new TwoFactorAuth();
 

@@ -18,6 +18,7 @@ public class AuthService {
   }
 
   public UserEntity register(UserEntity user) {
+    
     return userRepository.save(user);
   }
 

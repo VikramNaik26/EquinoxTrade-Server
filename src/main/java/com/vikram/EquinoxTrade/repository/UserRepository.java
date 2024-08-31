@@ -11,4 +11,6 @@ import com.vikram.EquinoxTrade.model.UserEntity;
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
+  UserEntity findByEmail(String email);
+
 }

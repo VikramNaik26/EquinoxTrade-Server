@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vikram.EquinoxTrade.model.UserEntity;
+import com.vikram.EquinoxTrade.response.AuthResponse;
 import com.vikram.EquinoxTrade.service.AuthService;
 
 /**
@@ -26,6 +27,11 @@ public class AuthController {
   @PostMapping("/signup")
   public ResponseEntity<UserEntity> register(@RequestBody UserEntity user) {
     return new ResponseEntity<>(authService.register(user), HttpStatus.CREATED);
+  }
+
+  @PostMapping("/signin")
+  public ResponseEntity<AuthResponse> login(@RequestBody UserEntity user) {
+    return new ResponseEntity<>(authService.verify(user), HttpStatus.OK);
   }
 
 }

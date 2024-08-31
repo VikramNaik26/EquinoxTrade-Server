@@ -27,6 +27,8 @@ public class UserEntity {
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // this makes password write only
   private String password;
 
+  private String mobile;
+
   @Embedded
   private TwoFactorAuth twoFactorAuth = new TwoFactorAuth();
 
@@ -62,6 +64,14 @@ public class UserEntity {
 
   public void setPassword(String password) {
     this.password = password;
+  }
+
+  public String getMobile() {
+    return mobile;
+  }
+
+  public void setMobile(String mobile) {
+    this.mobile = mobile;
   }
 
   public TwoFactorAuth getTwoFactorAuth() {

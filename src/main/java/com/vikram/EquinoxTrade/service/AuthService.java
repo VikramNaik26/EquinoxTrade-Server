@@ -26,16 +26,19 @@ public class AuthService {
   private UserRepository userRepository;
   private JwtService jwtService;
   private TwoFactorOtpService tOtpService;
+  private EmailService emailService;
 
   public AuthService(
       UserRepository userRepository,
       AuthenticationManager authManager,
       JwtService jwtService,
-      TwoFactorOtpService tOtpService) {
+      TwoFactorOtpService tOtpService,
+      EmailService emailService) {
     this.userRepository = userRepository;
     this.authManager = authManager;
     this.jwtService = jwtService;
     this.tOtpService = tOtpService;
+    this.emailService = emailService;
   }
 
   private BCryptPasswordEncoder bEncoder = new BCryptPasswordEncoder(12);
@@ -81,6 +84,8 @@ public class AuthService {
 
           TwoFactorOTP newTwoFactorOTP = tOtpService.createTwoFactorOtp(user, otp, token);
 
+          emailService.sendVerificationOtpEmail(user.getEmail(), otp);
+
           response.setSession(newTwoFactorOTP.getId());
 
           return response;
@@ -95,6 +100,7 @@ public class AuthService {
       response.setToken(token);
       response.setSuccess(true);
       response.setMessage("Login success");
+
       return response;
     }
 
@@ -102,6 +108,23 @@ public class AuthService {
     response.setSuccess(false);
     response.setMessage("Invalid credentials");
     return response;
+  }
+
+  public AuthResponse verifySigninOtp(String otp, String id) {
+    TwoFactorOTP twoFactorOTP = tOtpService.findById(id);
+
+    if (tOtpService.verifyTwoFactorOtp(twoFactorOTP, otp)) {
+      tOtpService.deleteTwoFactorOtp(twoFactorOTP);
+
+      AuthResponse response = new AuthResponse();
+      response.setSuccess(true);
+      response.setMessage("Two Factor Authentication verified");
+      response.setToken(twoFactorOTP.getJwt());
+
+      return response;
+    }
+
+    throw new AuthExcetion("Invalid OTP");
   }
 
 }

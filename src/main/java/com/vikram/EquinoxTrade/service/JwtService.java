@@ -1,6 +1,5 @@
 package com.vikram.EquinoxTrade.service;
 
-import java.util.List;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.Base64;
@@ -11,9 +10,6 @@ import java.util.function.Function;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -79,9 +75,9 @@ public class JwtService {
         .getPayload();
   }
 
-  public boolean validateToken(String token, String email) {
+  public boolean validateToken(String token, UserDetails userDetails) {
     final String tokenEmail = extractEmail(token);
-    return (tokenEmail.equals(email) && !isTokenExpired(token));
+    return (tokenEmail.equals(userDetails.getUsername()) && !isTokenExpired(token));
   }
 
   private boolean isTokenExpired(String token) {
@@ -91,12 +87,5 @@ public class JwtService {
   private Date extractExpiration(String token) {
     return extractClaims(token, Claims::getExpiration);
   }
-
-  // public List<GrantedAuthority> getAuthorities(String token) {
-  //   String authorities = String.valueOf(extractAllClaims(token).get("authorities"));
-  //   List<GrantedAuthority> simpleGrantedAuthorities = AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
-
-  //   return simpleGrantedAuthorities;
-  // }
 
 }

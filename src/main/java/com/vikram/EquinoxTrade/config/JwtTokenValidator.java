@@ -47,9 +47,9 @@ public class JwtTokenValidator extends OncePerRequestFilter {
     if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
       UserDetails userDetails = context.getBean(CustomUserDeatilsService.class).loadUserByUsername(email);
 
-      if (jwtService.validateToken(token, email)) {
+      if (jwtService.validateToken(token, userDetails)) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-            email,
+            userDetails,
             null,
             userDetails.getAuthorities()
         );

@@ -1,5 +1,8 @@
 package com.vikram.EquinoxTrade.service;
 
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -7,9 +10,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.vikram.EquinoxTrade.exception.AuthExcetion;
+import com.vikram.EquinoxTrade.model.TwoFactorOTP;
 import com.vikram.EquinoxTrade.model.UserEntity;
 import com.vikram.EquinoxTrade.repository.UserRepository;
 import com.vikram.EquinoxTrade.response.AuthResponse;
+import com.vikram.EquinoxTrade.utils.OtpUtils;
 
 /**
  * AuthService
@@ -20,14 +25,17 @@ public class AuthService {
   private AuthenticationManager authManager;
   private UserRepository userRepository;
   private JwtService jwtService;
+  private TwoFactorOtpService tOtpService;
 
   public AuthService(
       UserRepository userRepository,
       AuthenticationManager authManager,
-      JwtService jwtService) {
+      JwtService jwtService,
+      TwoFactorOtpService tOtpService) {
     this.userRepository = userRepository;
     this.authManager = authManager;
     this.jwtService = jwtService;
+    this.tOtpService = tOtpService;
   }
 
   private BCryptPasswordEncoder bEncoder = new BCryptPasswordEncoder(12);
@@ -54,6 +62,34 @@ public class AuthService {
 
     if (authentication.isAuthenticated()) {
       String token = jwtService.generateToken(user.getEmail());
+
+      if (user.getTwoFactorAuth().isEnabled()) {
+        AuthResponse response = new AuthResponse();
+
+        response.setMessage("Two Factor Authentication Enabled");
+        response.setTwoFactorAuthEnabled(true);
+
+        try {
+          String otp = OtpUtils.generateOtp();
+          System.out.println(otp);
+
+          TwoFactorOTP oldTwoFactorOTP = tOtpService.findByUserId(user.getId());
+
+          if (oldTwoFactorOTP != null) {
+            tOtpService.deleteTwoFactorOtp(oldTwoFactorOTP);
+          }
+
+          TwoFactorOTP newTwoFactorOTP = tOtpService.createTwoFactorOtp(user, otp, token);
+
+          response.setSession(newTwoFactorOTP.getId());
+
+          return response;
+
+        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
+          e.printStackTrace();
+        }
+
+      }
 
       AuthResponse response = new AuthResponse();
       response.setToken(token);

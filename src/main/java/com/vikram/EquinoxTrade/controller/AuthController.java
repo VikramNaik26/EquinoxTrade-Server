@@ -36,7 +36,7 @@ public class AuthController {
     return new ResponseEntity<>(authService.verify(user), HttpStatus.OK);
   }
 
-  @PostMapping("/verify")
+  @PostMapping("/verify-2fa/otp/{otp}")
   public ResponseEntity<AuthResponse> verifySigninOtp(
     @PathVariable String otp,
     @RequestParam String id) {

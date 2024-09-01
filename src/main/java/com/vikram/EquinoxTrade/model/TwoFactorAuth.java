@@ -1,6 +1,6 @@
 package com.vikram.EquinoxTrade.model;
 
-import com.vikram.EquinoxTrade.domain.VerificationaType;
+import com.vikram.EquinoxTrade.domain.VerificationType;
 
 import lombok.Data;
 
@@ -8,7 +8,7 @@ import lombok.Data;
 public class TwoFactorAuth {
 
   private boolean isEnabled = false;
-  private VerificationaType sendTo;
+  private VerificationType sendTo;
 
   public boolean isEnabled() {
     return isEnabled;
@@ -18,11 +18,11 @@ public class TwoFactorAuth {
     this.isEnabled = isEnabled;
   }
 
-  public VerificationaType getSendTo() {
+  public VerificationType getSendTo() {
     return sendTo;
   }
 
-  public void setSendTo(VerificationaType sendTo) {
+  public void setSendTo(VerificationType sendTo) {
     this.sendTo = sendTo;
   }
 

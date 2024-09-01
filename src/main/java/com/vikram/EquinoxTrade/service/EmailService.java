@@ -17,7 +17,8 @@ public class EmailService {
 
   private JavaMailSender mailSender;
 
-  public EmailService() {}
+  public EmailService() {
+  }
 
   @Autowired
   public EmailService(JavaMailSender mailSender) {
@@ -42,6 +43,25 @@ public class EmailService {
       throw new MailSendException("Failed to send email", e);
     }
 
+  }
+
+  public void sendTwoFactorAuthSuccessEmail(String sendTo) {
+    MimeMessage mimeMessage = mailSender.createMimeMessage();
+    MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, "utf-8");
+
+    String subject = "Two Factor Authentication Success";
+    String text = "Two Factor Authentication Success";
+
+    try {
+      mimeMessageHelper.setSubject(subject);
+      mimeMessageHelper.setText(text, true);
+      mimeMessageHelper.setTo(sendTo);
+      mimeMessageHelper.setFrom("V3g6H@example.com");
+    } catch (MessagingException e) {
+      throw new MailSendException("Failed to send email", e);
+    }
+
+    mailSender.send(mimeMessage);
   }
 
 }

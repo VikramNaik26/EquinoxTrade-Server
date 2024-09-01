@@ -1,6 +1,6 @@
 package com.vikram.EquinoxTrade.domain;
 
-public enum VerificationaType {
+public enum VerificationType {
   MOBILE,
   EMAIL
 }

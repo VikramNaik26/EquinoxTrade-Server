@@ -79,12 +79,11 @@ public class AuthService {
 
   private AuthResponse handleTwoFactorAuth(UserEntity user, String token) {
     AuthResponse response = new AuthResponse();
-    response.setMessage("Two Factor Authentication Enabled");
+    response.setMessage("Two Factor Authentication OTP sent to your email");
     response.setTwoFactorAuthEnabled(true);
 
     try {
       String otp = OtpUtils.generateOtp();
-      System.out.println(otp);
 
       TwoFactorOTP oldTwoFactorOTP = tOtpService.findByUserId(user.getId());
       if (oldTwoFactorOTP != null) {
@@ -128,7 +127,7 @@ public class AuthService {
       AuthResponse response = new AuthResponse();
       response.setSuccess(true);
       response.setMessage("Two Factor Authentication verified");
-      response.setToken(twoFactorOTP.getJwt());
+      response.setToken(twoFactorOTP.getJwt()); 
 
       return response;
     }

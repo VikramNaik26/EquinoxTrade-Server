@@ -2,6 +2,7 @@ package com.vikram.EquinoxTrade.service;
 
 import java.util.Optional;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.vikram.EquinoxTrade.domain.VerificationType;
@@ -24,6 +25,8 @@ public class UserServiceImpl implements UserService {
     this.userRepository = userRepository;
     this.jwtService = jwtService;
   }
+
+  private BCryptPasswordEncoder bEncoder = new BCryptPasswordEncoder(12);
 
   @Override
   public UserEntity findUserByJwt(String jwt) {
@@ -73,7 +76,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserEntity updatePassword(UserEntity user, String newPassword) {
-    user.setPassword(newPassword);
+    user.setPassword(bEncoder.encode(newPassword));
     return userRepository.save(user);
   }
 

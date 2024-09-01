@@ -100,7 +100,7 @@ public class UserController {
     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
   }
 
-  @PostMapping("/api/users/reset-passsword/send-otp")
+  @PostMapping("/auth/users/reset-passsword/send-otp")
   public ResponseEntity<AuthResponse> sendForgotPasswordOtp(
       @RequestBody ForgotPasswordTokenRequest request) {
     UserEntity user = userService.findUserByEmail(request.getSendTo());
@@ -139,7 +139,7 @@ public class UserController {
     }
   }
 
-  @PatchMapping("/api/users/reset-passsword/verify-otp")
+  @PatchMapping("/auth/users/reset-passsword/verify-otp")
   public ResponseEntity<String> verifyForgotPasswordOtp(
       @RequestParam String id,
       @RequestBody ResetPasswordRequest request) {
@@ -148,6 +148,8 @@ public class UserController {
 
     if (isVerified) {
       userService.updatePassword(forgotPasswordToken.getUser(), request.getPassword());
+      forgotPasswordService.deleteToken(forgotPasswordToken);
+
       return new ResponseEntity<>("Password reset successfully", HttpStatus.OK);
     }
 

@@ -1,7 +1,5 @@
 package com.vikram.EquinoxTrade.service;
 
-import org.springframework.stereotype.Service;
-
 import com.vikram.EquinoxTrade.model.TwoFactorOTP;
 import com.vikram.EquinoxTrade.model.UserEntity;
 

@@ -1,4 +1,4 @@
-package com.vikram.EquinoxTrade.service;
+package com.vikram.EquinoxTrade.service.impl;
 
 import java.util.Optional;
 
@@ -9,6 +9,8 @@ import com.vikram.EquinoxTrade.domain.VerificationType;
 import com.vikram.EquinoxTrade.model.TwoFactorAuth;
 import com.vikram.EquinoxTrade.model.UserEntity;
 import com.vikram.EquinoxTrade.repository.UserRepository;
+import com.vikram.EquinoxTrade.service.JwtService;
+import com.vikram.EquinoxTrade.service.UserService;
 
 /**
  * UserServiceImpl

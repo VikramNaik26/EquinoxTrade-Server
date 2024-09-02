@@ -1,67 +1,12 @@
 package com.vikram.EquinoxTrade.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailSendException;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Service;
-
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
-
 /**
  * EmailService
  */
-@Service
-public class EmailService {
+public interface EmailService {
 
-  private JavaMailSender mailSender;
+  public void sendVerificationOtpEmail(String email, String otp);
 
-  public EmailService() {
-  }
-
-  @Autowired
-  public EmailService(JavaMailSender mailSender) {
-    this.mailSender = mailSender;
-  }
-
-  public void sendVerificationOtpEmail(String email, String otp) {
-    MimeMessage mimeMessage = mailSender.createMimeMessage();
-    MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, "utf-8");
-
-    String subject = "Verify OTP";
-    String text = "Your OTP is " + otp;
-
-    try {
-      mimeMessageHelper.setSubject(subject);
-      mimeMessageHelper.setText(text, true);
-      mimeMessageHelper.setTo(email);
-      mimeMessageHelper.setFrom("V3g6H@example.com");
-
-      mailSender.send(mimeMessage);
-    } catch (MessagingException e) {
-      throw new MailSendException("Failed to send email", e);
-    }
-
-  }
-
-  public void sendTwoFactorAuthSuccessEmail(String sendTo) {
-    MimeMessage mimeMessage = mailSender.createMimeMessage();
-    MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, "utf-8");
-
-    String subject = "Two Factor Authentication Success";
-    String text = "Two Factor Authentication Success";
-
-    try {
-      mimeMessageHelper.setSubject(subject);
-      mimeMessageHelper.setText(text, true);
-      mimeMessageHelper.setTo(sendTo);
-      mimeMessageHelper.setFrom("V3g6H@example.com");
-    } catch (MessagingException e) {
-      throw new MailSendException("Failed to send email", e);
-    }
-
-    mailSender.send(mimeMessage);
-  }
+  public void sendTwoFactorAuthSuccessEmail(String sendTo);
 
 }

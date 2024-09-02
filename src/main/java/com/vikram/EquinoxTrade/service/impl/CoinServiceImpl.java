@@ -1,4 +1,4 @@
-package com.vikram.EquinoxTrade.service;
+package com.vikram.EquinoxTrade.service.impl;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vikram.EquinoxTrade.model.Coin;
 import com.vikram.EquinoxTrade.repository.CoinRepository;
+import com.vikram.EquinoxTrade.service.CoinService;
 import com.vikram.EquinoxTrade.urls.CoinUrl;
 import com.vikram.EquinoxTrade.utils.JsonNodeUtil;
 

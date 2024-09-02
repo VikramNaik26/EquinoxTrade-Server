@@ -1,4 +1,4 @@
-package com.vikram.EquinoxTrade.service;
+package com.vikram.EquinoxTrade.service.impl;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -10,6 +10,7 @@ import com.vikram.EquinoxTrade.domain.VerificationType;
 import com.vikram.EquinoxTrade.model.UserEntity;
 import com.vikram.EquinoxTrade.model.VerificationCode;
 import com.vikram.EquinoxTrade.repository.VerificationCodeRepository;
+import com.vikram.EquinoxTrade.service.VerificationCodeService;
 import com.vikram.EquinoxTrade.utils.OtpUtils;
 
 /**

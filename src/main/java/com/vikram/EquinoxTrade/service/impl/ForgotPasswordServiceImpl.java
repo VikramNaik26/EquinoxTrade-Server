@@ -1,4 +1,4 @@
-package com.vikram.EquinoxTrade.service;
+package com.vikram.EquinoxTrade.service.impl;
 
 import java.util.Optional;
 
@@ -8,6 +8,7 @@ import com.vikram.EquinoxTrade.domain.VerificationType;
 import com.vikram.EquinoxTrade.model.ForgotPasswordToken;
 import com.vikram.EquinoxTrade.model.UserEntity;
 import com.vikram.EquinoxTrade.repository.ForgotPasswordRepository;
+import com.vikram.EquinoxTrade.service.ForgotPasswordService;
 
 /**
  * ForgotPasswordServiceImpl

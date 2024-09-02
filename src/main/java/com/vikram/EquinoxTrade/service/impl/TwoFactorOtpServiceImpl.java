@@ -1,4 +1,4 @@
-package com.vikram.EquinoxTrade.service;
+package com.vikram.EquinoxTrade.service.impl;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.vikram.EquinoxTrade.model.TwoFactorOTP;
 import com.vikram.EquinoxTrade.model.UserEntity;
 import com.vikram.EquinoxTrade.repository.TwoFactorOtpRepository;
+import com.vikram.EquinoxTrade.service.TwoFactorOtpService;
 
 /**
  * TwoFactorOtpServiceImpl

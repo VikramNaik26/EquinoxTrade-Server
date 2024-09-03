@@ -14,6 +14,7 @@ import com.vikram.EquinoxTrade.model.Order;
 import com.vikram.EquinoxTrade.model.UserEntity;
 import com.vikram.EquinoxTrade.model.Wallet;
 import com.vikram.EquinoxTrade.model.WalletTransaction;
+import com.vikram.EquinoxTrade.service.OrderService;
 import com.vikram.EquinoxTrade.service.UserService;
 import com.vikram.EquinoxTrade.service.WalletService;
 
@@ -26,12 +27,15 @@ public class WalletController {
 
   private WalletService walletService;
   private UserService userService;
+  private OrderService orderService;
 
   public WalletController(
       WalletService walletService,
-      UserService userService) {
+      UserService userService,
+      OrderService orderService) {
     this.walletService = walletService;
     this.userService = userService;
+    this.orderService = orderService;
   }
 
   @GetMapping
@@ -61,7 +65,7 @@ public class WalletController {
       @RequestBody WalletTransaction walletTransaction) {
     UserEntity user = userService.findUserByJwt(jwt);
 
-    // Order order = orderService.findOrderById(orderId);
+    Order order = orderService.getOrderById(orderId);
 
     Wallet wallet = walletService.payOrderPayment(order, user);
 

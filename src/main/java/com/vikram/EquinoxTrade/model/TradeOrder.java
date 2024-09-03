@@ -19,7 +19,7 @@ import jakarta.persistence.OneToOne;
  * Order
  */
 @Entity
-public class Order {
+public class TradeOrder {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)

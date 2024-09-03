@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.vikram.EquinoxTrade.domain.OrderType;
 import com.vikram.EquinoxTrade.model.Coin;
-import com.vikram.EquinoxTrade.model.Order;
+import com.vikram.EquinoxTrade.model.TradeOrder;
 import com.vikram.EquinoxTrade.model.OrderItem;
 import com.vikram.EquinoxTrade.model.UserEntity;
 
@@ -13,12 +13,12 @@ import com.vikram.EquinoxTrade.model.UserEntity;
  */
 public interface OrderService {
 
-  public Order createOrder(UserEntity user, OrderItem orderItem, OrderType orderType);
+  public TradeOrder createOrder(UserEntity user, OrderItem orderItem, OrderType orderType);
 
-  public Order getOrderById(Long id);
+  public TradeOrder getOrderById(Long id);
 
-  public List<Order> getAllOrdersByUser(Long userId, OrderType type, String assetSymbol);
+  public List<TradeOrder> getAllOrdersByUser(Long userId, OrderType type, String assetSymbol);
 
-  public Order processOrder(Coin coin, double quantity, OrderType orderType, UserEntity user);
+  public TradeOrder processOrder(Coin coin, double quantity, OrderType orderType, UserEntity user);
 
 }

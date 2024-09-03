@@ -2,7 +2,7 @@ package com.vikram.EquinoxTrade.service;
 
 import java.math.BigDecimal;
 
-import com.vikram.EquinoxTrade.model.Order;
+import com.vikram.EquinoxTrade.model.TradeOrder;
 import com.vikram.EquinoxTrade.model.UserEntity;
 import com.vikram.EquinoxTrade.model.Wallet;
 
@@ -19,6 +19,6 @@ public interface WalletService {
 
   public Wallet walletToWalletTransfer(UserEntity sender, Wallet recieverWallet, BigDecimal amount);
 
-  public Wallet payOrderPayment(Order order, UserEntity user);
+  public Wallet payOrderPayment(TradeOrder order, UserEntity user);
 
 }

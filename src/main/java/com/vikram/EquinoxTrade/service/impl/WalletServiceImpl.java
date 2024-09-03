@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.vikram.EquinoxTrade.domain.OrderType;
-import com.vikram.EquinoxTrade.model.Order;
+import com.vikram.EquinoxTrade.model.TradeOrder;
 import com.vikram.EquinoxTrade.model.UserEntity;
 import com.vikram.EquinoxTrade.model.Wallet;
 import com.vikram.EquinoxTrade.repository.WalletRepository;
@@ -73,7 +73,7 @@ public class WalletServiceImpl implements WalletService {
   }
 
   @Override
-  public Wallet payOrderPayment(Order order, UserEntity user) {
+  public Wallet payOrderPayment(TradeOrder order, UserEntity user) {
     Wallet userWallet = getUserWallet(user);
 
     if (order.getOrderType().equals(OrderType.BUY)) {

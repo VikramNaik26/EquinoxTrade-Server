@@ -32,7 +32,7 @@ public class OrderItem {
 
   @JsonIgnore
   @OneToOne
-  private Order order;
+  private TradeOrder order;
 
   public Long getId() {
     return id;
@@ -74,11 +74,11 @@ public class OrderItem {
     this.sellPrice = sellPrice;
   }
 
-  public Order getOrder() {
+  public TradeOrder getOrder() {
     return order;
   }
 
-  public void setOrder(Order order) {
+  public void setOrder(TradeOrder order) {
     this.order = order;
   }
 

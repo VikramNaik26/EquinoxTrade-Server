@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vikram.EquinoxTrade.model.Order;
+import com.vikram.EquinoxTrade.model.TradeOrder;
 import com.vikram.EquinoxTrade.model.UserEntity;
 import com.vikram.EquinoxTrade.model.Wallet;
 import com.vikram.EquinoxTrade.model.WalletTransaction;
@@ -65,7 +65,7 @@ public class WalletController {
       @RequestBody WalletTransaction walletTransaction) {
     UserEntity user = userService.findUserByJwt(jwt);
 
-    Order order = orderService.getOrderById(orderId);
+    TradeOrder order = orderService.getOrderById(orderId);
 
     Wallet wallet = walletService.payOrderPayment(order, user);
 

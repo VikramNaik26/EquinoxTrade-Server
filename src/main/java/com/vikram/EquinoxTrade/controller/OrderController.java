@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vikram.EquinoxTrade.domain.OrderType;
 import com.vikram.EquinoxTrade.model.Coin;
-import com.vikram.EquinoxTrade.model.Order;
+import com.vikram.EquinoxTrade.model.TradeOrder;
 import com.vikram.EquinoxTrade.model.UserEntity;
 import com.vikram.EquinoxTrade.request.CreateOrderRequest;
 import com.vikram.EquinoxTrade.service.CoinService;
@@ -47,24 +47,24 @@ public class OrderController {
   }
 
   @PostMapping("/pay")
-  public ResponseEntity<Order> payOrderPayment(
+  public ResponseEntity<TradeOrder> payOrderPayment(
       @RequestHeader("Authorization") String jwt,
       @RequestBody CreateOrderRequest request) {
     UserEntity user = userService.findUserByJwt(jwt);
     Coin coin = coinService.findById(request.getCoinId());
 
-    Order order = orderService.processOrder(coin, request.getQuantity(), request.getOrderType(), user);
+    TradeOrder order = orderService.processOrder(coin, request.getQuantity(), request.getOrderType(), user);
 
     return new ResponseEntity<>(order, HttpStatus.OK);
   }
 
   @PostMapping("/{orderId}")
-  public ResponseEntity<Order> getOrderById(
+  public ResponseEntity<TradeOrder> getOrderById(
       @RequestHeader("Authorization") String jwt,
       @PathVariable Long orderId) {
     UserEntity user = userService.findUserByJwt(jwt);
 
-    Order order = orderService.getOrderById(orderId);
+    TradeOrder order = orderService.getOrderById(orderId);
 
     if (order.getUser().getId().equals(user.getId())) {
       return new ResponseEntity<>(order, HttpStatus.OK);
@@ -74,13 +74,15 @@ public class OrderController {
   }
 
   @GetMapping
-  public ResponseEntity<List<Order>> getAllOrdersForUser(
+  public ResponseEntity<List<TradeOrder>> getAllOrdersForUser(
       @RequestHeader("Authorization") String jwt,
       @RequestParam(required = false) OrderType order_type,
-      @RequestParam(required = false) String asset_sysbol) {
+      @RequestParam(required = false) String asset_symbol) {
+    System.out.println("JWT" + jwt);
     Long userId = userService.findUserByJwt(jwt).getId();
+    System.out.println("userId" + userId);
 
-    return new ResponseEntity<>(orderService.getAllOrdersByUser(userId, order_type, asset_sysbol), HttpStatus.OK);
+    return new ResponseEntity<>(orderService.getAllOrdersByUser(userId, order_type, asset_symbol), HttpStatus.OK);
   }
 
 }

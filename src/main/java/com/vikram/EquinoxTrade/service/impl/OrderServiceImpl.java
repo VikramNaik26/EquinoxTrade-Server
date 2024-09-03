@@ -8,12 +8,14 @@ import org.springframework.stereotype.Service;
 
 import com.vikram.EquinoxTrade.domain.OrderStatus;
 import com.vikram.EquinoxTrade.domain.OrderType;
+import com.vikram.EquinoxTrade.model.Asset;
 import com.vikram.EquinoxTrade.model.Coin;
 import com.vikram.EquinoxTrade.model.Order;
 import com.vikram.EquinoxTrade.model.OrderItem;
 import com.vikram.EquinoxTrade.model.UserEntity;
 import com.vikram.EquinoxTrade.repository.OrderItemRepository;
 import com.vikram.EquinoxTrade.repository.OrderRepository;
+import com.vikram.EquinoxTrade.service.AssetService;
 import com.vikram.EquinoxTrade.service.OrderService;
 import com.vikram.EquinoxTrade.service.WalletService;
 
@@ -28,14 +30,17 @@ public class OrderServiceImpl implements OrderService {
   private OrderRepository orderRepository;
   private WalletService walletService;
   private OrderItemRepository orderItemRepository;
+  private AssetService assetService;
 
   public OrderServiceImpl(
       OrderRepository orderRepository,
       WalletService walletService,
-      OrderItemRepository orderItemRepository) {
+      OrderItemRepository orderItemRepository,
+      AssetService assetService) {
     this.orderRepository = orderRepository;
     this.walletService = walletService;
     this.orderItemRepository = orderItemRepository;
+    this.assetService = assetService;
   }
 
   @Override
@@ -96,7 +101,16 @@ public class OrderServiceImpl implements OrderService {
     order.setOrderType(OrderType.BUY);
 
     Order saveOrder = orderRepository.save(order);
-    // TODO: create asset
+
+    Asset oldAsset = assetService.findAssetByUserIdAndCoinId(
+        order.getUser().getId(),
+        order.getOrderItem().getCoin().getId());
+
+    if (oldAsset == null) {
+      assetService.createAsset(order.getUser(), orderItem.getCoin(), orderItem.getQuantity());
+    } else {
+      assetService.updateAsset(oldAsset.getId(), quantity);
+    }
 
     return saveOrder;
   }
@@ -109,28 +123,40 @@ public class OrderServiceImpl implements OrderService {
 
     double sellPrice = coin.getCurrentPrice();
 
-    double buyPrice = assetToSell.getPrice();
+    Asset assetToSell = assetService.findAssetByUserIdAndCoinId(
+        user.getId(),
+        coin.getId());
 
-    OrderItem orderItem = createOrderItem(coin, quantity, BigDecimal.valueOf(buyPrice), BigDecimal.valueOf(sellPrice));
+    if (assetToSell != null) {
+      BigDecimal buyPrice = assetToSell.getBuyPrice();
 
-    Order order = createOrder(user, orderItem, OrderType.SELL);
-    orderItem.setOrder(order);
+      OrderItem orderItem = createOrderItem(
+          coin,
+          quantity,
+          buyPrice,
+          BigDecimal.valueOf(sellPrice));
 
-    if (assetToSell.getQuantity() >= quantity) {
-      order.setStatus(OrderStatus.SUCCESS);
-      order.setOrderType(OrderType.SELL);
+      Order order = createOrder(user, orderItem, OrderType.SELL);
+      orderItem.setOrder(order);
 
-      Order saveOrder = orderRepository.save(order);
-      // TODO: create asset
+      if (assetToSell.getQuantity() >= quantity) {
+        order.setStatus(OrderStatus.SUCCESS);
+        order.setOrderType(OrderType.SELL);
 
-      walletService.payOrderPayment(order, user);
+        Order saveOrder = orderRepository.save(order);
 
-      Asset updatedAsset = assetService.updateAsset(assetToSell.getId(), -quantity);
-      if (updatedAsset.getQauntity() * coin.getCurrentPrice() <= 1) {
-        assetService.deleteAsset(updatedAsset.getId());
+        walletService.payOrderPayment(order, user);
+
+        Asset updatedAsset = assetService.updateAsset(assetToSell.getId(), -quantity);
+
+        if (updatedAsset.getQuantity() * coin.getCurrentPrice() <= 1) {
+          assetService.deleteAsset(updatedAsset.getId());
+        }
+
+        return saveOrder;
       }
 
-      return saveOrder;
+      throw new RuntimeException("Not enough assets to sell");
     }
 
     throw new RuntimeException("Not enough assets to sell");

@@ -36,7 +36,7 @@ public class AssetController {
     return new ResponseEntity<>(asset, HttpStatus.OK);
   }
 
-  @GetMapping("/{assetId}")
+  @GetMapping("/coin/{coinId}/user")
   public ResponseEntity<Asset> getAssetByUserIdAndCoinId(
       @PathVariable String coinId,
       @RequestHeader("Authorization") String jwt) {
@@ -46,7 +46,7 @@ public class AssetController {
     return new ResponseEntity<>(asset, HttpStatus.OK);
   }
 
-  @GetMapping("/{assetId}")
+  @GetMapping
   public ResponseEntity<List<Asset>> getAssetsForUser(
       @RequestHeader("Authorization") String jwt) {
     UserEntity user = userService.findUserByJwt(jwt);

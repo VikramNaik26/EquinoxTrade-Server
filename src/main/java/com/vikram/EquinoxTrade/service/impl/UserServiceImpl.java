@@ -32,6 +32,10 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserEntity findUserByJwt(String jwt) {
+    if (jwt.startsWith("Bearer ")) {
+      jwt = jwt.substring(7);
+    }
+
     String email = jwtService.extractEmail(jwt);
     UserEntity user = userRepository.findByEmail(email);
 

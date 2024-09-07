@@ -1,5 +1,7 @@
 package com.vikram.EquinoxTrade.controller;
 
+import java.math.BigDecimal;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -91,6 +93,10 @@ public class WalletController {
     PaymentOrder order = paymentService.getPaymentOrderById(orderId);
 
     Boolean status = paymentService.proceedPaymentOrder(order, paymentId);
+
+    if(wallet.getBalance() == null) {
+      wallet.setBalance(BigDecimal.ZERO);
+    }
 
     if (status) {
       wallet = walletService.addBalance(wallet, order.getAmount());

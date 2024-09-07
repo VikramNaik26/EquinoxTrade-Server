@@ -51,6 +51,7 @@ public class PaymentServiceImpl implements PaymentService {
     paymentOrder.setUser(user);
     paymentOrder.setAmount(amount);
     paymentOrder.setPaymentMethod(paymentMethod);
+    paymentOrder.setStatus(PaymentOrderStatus.PENDING);
 
     return paymentRepositoty.save(paymentOrder);
   }
@@ -62,6 +63,9 @@ public class PaymentServiceImpl implements PaymentService {
 
   @Override
   public Boolean proceedPaymentOrder(PaymentOrder paymentOrder, String paymentId) throws RazorpayException {
+    if(paymentOrder.getStatus() == null) {
+      paymentOrder.setStatus(PaymentOrderStatus.PENDING);
+    }
     /* if (paymentOrder.getStatus().equals(PaymentOrderStatus.PENDING)) {
       if (paymentOrder.getPaymentMethod().equals(PaymentMethod.RAZORPAY)) {
         RazorpayClient razorpayClient = new RazorpayClient(apiKey, apiSecretKey);
@@ -85,7 +89,7 @@ public class PaymentServiceImpl implements PaymentService {
       return true;
     } */
 
-    return false;
+    return true;
   }
 
   @Override
@@ -124,7 +128,7 @@ public class PaymentServiceImpl implements PaymentService {
   }
 
   @Override
-  public PaymentResponse createRazorpayPaymentLink(UserEntity user, Long amount) {
+  public PaymentResponse createRazorpayPaymentLink(UserEntity user, Long amount, Long orderId) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'createRazorpayPaymentLink'");
 
@@ -149,7 +153,7 @@ public class PaymentServiceImpl implements PaymentService {
      * 
      * paymentLinkRequest.put("remainder_enabled", true);
      * 
-     * paymentLinkRequest.put("callback_url", "http://localhost:5173/wallet");
+     * paymentLinkRequest.put("callback_url", "http://localhost:5173/wallet?order_id=" + orderId);
      * paymentLinkRequest.put("callback_method", "GET");
      * 
      * PaymentLink paymentLink =

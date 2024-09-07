@@ -32,17 +32,16 @@ public class PaymentDetailsController {
   }
 
   @PostMapping("/payment-details")
-public ResponseEntity<PaymentDetails> addPaymentDetails(
+  public ResponseEntity<PaymentDetails> addPaymentDetails(
       @RequestBody PaymentDetails paymenyDetailsRequest,
       @RequestHeader("Authorization") String jwt) {
     UserEntity user = userService.findUserByJwt(jwt);
     PaymentDetails paymentDetails = paymentDetailsService.addPaymentDetails(
-      paymenyDetailsRequest.getAccountNumber(),
-      paymenyDetailsRequest.getAccountHolderName(),
-      paymenyDetailsRequest.getIfscCode(),
-      paymenyDetailsRequest.getBankName(),
-      user
-    );
+        paymenyDetailsRequest.getAccountNumber(),
+        paymenyDetailsRequest.getAccountHolderName(),
+        paymenyDetailsRequest.getIfscCode(),
+        paymenyDetailsRequest.getBankName(),
+        user);
 
     return new ResponseEntity<>(paymentDetails, HttpStatus.OK);
   }

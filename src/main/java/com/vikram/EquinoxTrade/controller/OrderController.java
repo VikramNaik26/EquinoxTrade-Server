@@ -58,7 +58,7 @@ public class OrderController {
     return new ResponseEntity<>(order, HttpStatus.OK);
   }
 
-  @PostMapping("/{orderId}")
+  @GetMapping("/{orderId}")
   public ResponseEntity<TradeOrder> getOrderById(
       @RequestHeader("Authorization") String jwt,
       @PathVariable Long orderId) {

@@ -22,6 +22,6 @@ public interface PaymentService {
 
   public PaymentResponse createStripePaymentLink(UserEntity user, Long amount, Long orderId) throws StripeException;
 
-  public PaymentResponse createRazorpayPaymentLink(UserEntity user, Long amount);
+  public PaymentResponse createRazorpayPaymentLink(UserEntity user, Long amount, Long orderId);
 
 }

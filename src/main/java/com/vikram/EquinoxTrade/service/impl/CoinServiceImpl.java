@@ -169,8 +169,8 @@ public class CoinServiceImpl implements CoinService {
   }
 
   @Override
-  public String getTradingCoins() {
-    String url = CoinUrl.tradingCoinsUrl;
+  public String getTrendingCoins() {
+    String url = CoinUrl.trendingCoinsUrl;
 
     RestTemplate restTemplate = new RestTemplate();
 

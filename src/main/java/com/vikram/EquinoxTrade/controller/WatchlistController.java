@@ -47,21 +47,21 @@ public class WatchlistController {
 
   @GetMapping("/{watchlistId}")
   public ResponseEntity<Watchlist> getWatchlistById(
-    @PathVariable Long wacthlistId
+    @PathVariable Long watchlistId
   ) {
-    Watchlist watchlist = watchlistService.findById(wacthlistId);
+    Watchlist watchlist = watchlistService.findById(watchlistId);
 
     return new ResponseEntity<>(watchlist, HttpStatus.OK);
   }
 
   @PatchMapping("/add/coin/{coinId}")
-  public ResponseEntity<Coin> addItemToWatchlist(
+  public ResponseEntity<Coin> toggleItemToWatchlist(
   @RequestHeader("Authorization") String jwt,
   @PathVariable String coinId) {
     UserEntity user = userService.findUserByJwt(jwt);
 
     Coin coin = coinService.findById(coinId);
-    Coin addedCoin = watchlistService.addItemToWatchlist(user, coin);
+    Coin addedCoin = watchlistService.toggleItemToWatchlist(user, coin);
 
     return new ResponseEntity<>(addedCoin, HttpStatus.OK);
   }

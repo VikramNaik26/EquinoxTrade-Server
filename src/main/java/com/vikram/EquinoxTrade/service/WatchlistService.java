@@ -14,7 +14,6 @@ public interface WatchlistService {
   public Watchlist createWatchlist(UserEntity user);
 
   public Watchlist findById(Long id);
-
-  Coin addItemToWatchlist(UserEntity user, Coin coin);
-  
+ 
+  Coin toggleItemToWatchlist(UserEntity user, Coin coin);
 }

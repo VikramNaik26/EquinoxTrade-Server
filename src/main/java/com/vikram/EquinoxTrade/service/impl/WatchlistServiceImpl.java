@@ -45,13 +45,15 @@ public class WatchlistServiceImpl implements WatchlistService {
   }
 
   @Override
-  public Coin addItemToWatchlist(UserEntity user, Coin coin) {
+  public Coin toggleItemToWatchlist(UserEntity user, Coin coin) {
     Watchlist watchlist = findUserWatchlist(user.getId());
 
-    if(!watchlist.getCoins().contains(coin)) {
+    if (watchlist.getCoins().contains(coin)) {
+      watchlist.getCoins().remove(coin);
+    } else {
       watchlist.getCoins().add(coin);
     }
-    watchlist.getCoins().remove(coin);
+
     watchlistRepository.save(watchlist);
 
     return coin;

@@ -18,6 +18,7 @@ import com.vikram.EquinoxTrade.service.AuthService;
 import com.vikram.EquinoxTrade.service.EmailService;
 import com.vikram.EquinoxTrade.service.JwtService;
 import com.vikram.EquinoxTrade.service.TwoFactorOtpService;
+import com.vikram.EquinoxTrade.service.WatchlistService;
 import com.vikram.EquinoxTrade.utils.OtpUtils;
 
 /**
@@ -31,18 +32,21 @@ public class AuthServiceImpl implements AuthService {
   private JwtService jwtService;
   private TwoFactorOtpService tOtpService;
   private EmailService emailService;
+  private WatchlistService watchlistService;
 
   public AuthServiceImpl(
       UserRepository userRepository,
       AuthenticationManager authManager,
       JwtService jwtService,
       TwoFactorOtpService tOtpService,
-      EmailService emailService) {
+      EmailService emailService,
+      WatchlistService watchlistService) {
     this.userRepository = userRepository;
     this.authManager = authManager;
     this.jwtService = jwtService;
     this.tOtpService = tOtpService;
     this.emailService = emailService;
+    this.watchlistService = watchlistService;
   }
 
   private BCryptPasswordEncoder bEncoder = new BCryptPasswordEncoder(12);
@@ -55,7 +59,11 @@ public class AuthServiceImpl implements AuthService {
     }
 
     user.setPassword(bEncoder.encode(user.getPassword()));
-    return userRepository.save(user);
+    UserEntity savedUser = userRepository.save(user);
+
+    watchlistService.createWatchlist(savedUser);
+
+    return savedUser;
   }
 
   public AuthResponse verify(UserEntity loginAttempt) {

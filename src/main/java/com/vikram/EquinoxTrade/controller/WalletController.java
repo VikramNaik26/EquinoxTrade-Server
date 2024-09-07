@@ -8,13 +8,17 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.razorpay.RazorpayException;
+import com.vikram.EquinoxTrade.model.PaymentOrder;
 import com.vikram.EquinoxTrade.model.TradeOrder;
 import com.vikram.EquinoxTrade.model.UserEntity;
 import com.vikram.EquinoxTrade.model.Wallet;
 import com.vikram.EquinoxTrade.model.WalletTransaction;
 import com.vikram.EquinoxTrade.service.OrderService;
+import com.vikram.EquinoxTrade.service.PaymentService;
 import com.vikram.EquinoxTrade.service.UserService;
 import com.vikram.EquinoxTrade.service.WalletService;
 
@@ -28,14 +32,17 @@ public class WalletController {
   private WalletService walletService;
   private UserService userService;
   private OrderService orderService;
+  private PaymentService paymentService;
 
   public WalletController(
       WalletService walletService,
       UserService userService,
-      OrderService orderService) {
+      OrderService orderService,
+      PaymentService paymentService) {
     this.walletService = walletService;
     this.userService = userService;
     this.orderService = orderService;
+    this.paymentService = paymentService;
   }
 
   @GetMapping
@@ -68,6 +75,26 @@ public class WalletController {
     TradeOrder order = orderService.getOrderById(orderId);
 
     Wallet wallet = walletService.payOrderPayment(order, user);
+
+    return new ResponseEntity<>(wallet, HttpStatus.OK);
+  }
+
+  @PutMapping("/order/deposit")
+  public ResponseEntity<Wallet> addMoneyToWallet(
+      @RequestHeader("Authorization") String jwt,
+      @RequestParam(name = "order_id") Long orderId,
+      @RequestParam(name = "payment_id") String paymentId) throws RazorpayException {
+    UserEntity user = userService.findUserByJwt(jwt);
+
+    Wallet wallet = walletService.getUserWallet(user);
+
+    PaymentOrder order = paymentService.getPaymentOrderById(orderId);
+
+    Boolean status = paymentService.proceedPaymentOrder(order, paymentId);
+
+    if (status) {
+      wallet = walletService.addBalance(wallet, order.getAmount());
+    }
 
     return new ResponseEntity<>(wallet, HttpStatus.OK);
   }

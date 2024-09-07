@@ -1,5 +1,7 @@
 package com.vikram.EquinoxTrade.service.impl;
 
+import org.springframework.stereotype.Service;
+
 import com.vikram.EquinoxTrade.model.PaymentDetails;
 import com.vikram.EquinoxTrade.model.UserEntity;
 import com.vikram.EquinoxTrade.repository.PaymentDetailsRepository;
@@ -8,6 +10,7 @@ import com.vikram.EquinoxTrade.service.PaymentDetailsService;
 /**
  * PaymentDetailsServiceImpl
  */
+@Service
 public class PaymentDetailsServiceImpl implements PaymentDetailsService {
 
   private PaymentDetailsRepository paymentDetailsRepository;
